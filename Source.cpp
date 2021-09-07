@@ -26,11 +26,12 @@ private:
 	vector<vec2d> points;
 	vector<stick> sticks;
 
-	float floor_height = 5;
+	float gravity = 0.5;
+	float floor_height = 5; //height where floor friction is aplied
 	float floor_friction = 0.9;
-	float bounce = 0.9;
-	float friction = 0.99;
-	float hardness = 3;
+	float bounce = 0.9; //how bounce will slow down
+	float friction = 0.99; //all time friction
+	float hardness = 3; // how many times to controll if line is wrong lenght or point coliding
 
 	void render_points() {
 		for (int i = 0; i < points.size(); i++) {
@@ -40,7 +41,7 @@ private:
 	}
 
 
-	void update_sticks() {
+	void update_sticks() { //controling the stick lenght
 		for (int i = 0; i < sticks.size(); i++) {
 			stick s = sticks[i];
 			float current_lenght = get_distance(points[s.p1], points[s.p2]);
@@ -73,7 +74,7 @@ private:
 
 
 
-	void control_points() {
+	void control_points() { //calculating collision
 		for (int i = 0; i < points.size(); i++) {
 			vec2d point = points[i];
 			float velox = (point.x - point.oldx) * friction;
@@ -110,7 +111,7 @@ private:
 	}
 
 
-	void update_points() {
+	void update_points() { //updating the point position acording to velocity and gravity
 		for (int i = 0; i < points.size(); i++) {
 			vec2d point = points[i];
 			float add_frict = 1;
@@ -124,28 +125,9 @@ private:
 			point.oldy = point.y;
 			point.x += velox;
 			point.y += veloy;
-			point.y += 0.5;
+			point.y += gravity;
 			
-			/*
-			if (point.x >= ScreenWidth()) {
-				point.x = ScreenWidth();
-				point.oldx = point.x + velox * bounce;
-			}
-
-			if (point.x < 0) {
-				point.x = 0;
-				point.oldx = point.x + velox * bounce;
-			}
-
-			if (point.y >= ScreenHeight()) {
-				point.y = ScreenHeight();
-				point.oldy = point.y + veloy * bounce;
-			}
-
-			if (point.y < 0) {
-				point.y = 0;
-				point.oldy = point.y + veloy * bounce;
-			}*/
+		
 	
 
 			points[i] = point;
@@ -157,6 +139,8 @@ public:
 	Graph()
 	{}
 	virtual bool OnUserCreate() {
+		// objects constucted here
+
 		points.push_back({50,0,40,0});
 		points.push_back({ 80,0,70,0 });
 		points.push_back({ 50,30,40,20 });
